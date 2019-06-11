@@ -23,7 +23,7 @@ public class Application {
 
     public Application() {
         this.producer = createProducer();
-        this.topic = "/user/mapr/streams/chicos/customer-test.st:all1";
+        this.topic = "/user/mapr/streams/chicos/customer-test.st:all";
         this.dao = new CustomerDAO();
         service = new CustomerService();
     }
@@ -54,6 +54,7 @@ public class Application {
 
                     document.setId(id);
                     service.setMarketingEmail(document, take + "test@test.com");
+                    service.removeConsolidationsArray(document);
 
                     ProducerRecord<String, String> record = new ProducerRecord<>(topic, id, document.asJsonString());
                     producer.send(record);
@@ -75,7 +76,7 @@ public class Application {
 
         Application app = new Application();
 
-        int total = 20000;
+        int total = 2000;
         Random random = new Random();
 
 

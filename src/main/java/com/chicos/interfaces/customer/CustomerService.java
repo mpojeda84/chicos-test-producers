@@ -52,6 +52,10 @@ public class CustomerService {
 
     }
 
+    public void removeConsolidationsArray(Document document) {
+        document.delete("consolidations");
+    }
+
 
 
 }

@@ -43,6 +43,13 @@ public class CustomerService {
         document.set(path, value);
     }
 
+    public void replaceID (Document document) {
+    	String id [] = document.getIdString().split("\\+");
+    	document.set("brand_id", Long.parseLong(id[0]));
+    	document.set("customer_no", Long.parseLong(id[1]));
+    	document.delete("_id");    	
+    }
+    
     public void setMarketingEmail(Document document, String email) {
 
         Map<String, Object> newEmail = new HashMap<>();

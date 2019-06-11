@@ -11,7 +11,7 @@ import java.util.List;
 
 public class CustomerDAO {
 
-    private String table = "/chicos/tables/cu14-3-h100k.db";
+    private String table = "/user/mapr/tables/chicos/customer.db";
     private static int current = 0;
 
     private Connection connection = DriverManager.getConnection("ojai:mapr:");

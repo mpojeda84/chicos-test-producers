@@ -23,7 +23,7 @@ public class Application {
 
     public Application() {
         this.producer = createProducer();
-        this.topic = "/user/mapr/streams/chicos/customer-test.st:all";
+        this.topic = "/tmp/customer-test.st:all";
         this.dao = new CustomerDAO();
         service = new CustomerService();
     }
@@ -53,6 +53,7 @@ public class Application {
                     Document document = dao.get(x);
 
                     document.setId(id);
+                    service.replaceID(document);
                     service.setMarketingEmail(document, take + "test@test.com");
                     service.removeConsolidationsArray(document);
 
@@ -77,8 +78,10 @@ public class Application {
         Application app = new Application();
 
         int total = 2000;
+        try { total = Integer.parseInt(args[0]); }
+        catch (Exception e) { }
+        
         Random random = new Random();
-
 
         Map<String, Queue<String>> ids = new HashMap<>();
 

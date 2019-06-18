@@ -11,14 +11,13 @@ import java.util.List;
 
 public class CustomerDAO {
 
-    private String table = "/user/mapr/tables/chicos/customer.db";
-    private static int current = 0;
-
     private Connection connection = DriverManager.getConnection("ojai:mapr:");
-    private DocumentStore store;
+    private VBStore store;
+//  private DocumentStore store;
 
-    public CustomerDAO() {
-        store = connection.getStore(table);
+    public CustomerDAO(String tabelPath) {
+        store = new VBStore (connection.getStore(tabelPath));
+//      store = connection.getStore(tabelPath);
     }
 
     public Iterator<Document> getIterator() {

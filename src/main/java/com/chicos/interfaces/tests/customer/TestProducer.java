@@ -1,4 +1,4 @@
-package com.chicos.interfaces;
+package com.chicos.interfaces.tests.customer;
 
 import com.chicos.interfaces.customer.CustomerDAO;
 import com.chicos.interfaces.customer.CustomerService;
@@ -13,6 +13,7 @@ import org.ojai.Document;
 
 import java.util.*;
 
+@Deprecated
 public class TestProducer {
 
     private String topic;
@@ -26,7 +27,7 @@ public class TestProducer {
     public TestProducer(String tablePathToRead, String streamTopicToWrite) {
         this.producer = createProducer();
         this.topic = streamTopicToWrite;
-        this.dao = new CustomerDAO(tablePathToRead);
+        this.dao = new CustomerDAO(tablePathToRead, false);
         this.service = new CustomerService();
     }
 
@@ -60,7 +61,7 @@ public class TestProducer {
                     Document document = dao.get(x);
                     document.setId(id);
                     
-                    service.replaceID(document);
+                    service.replaceCustomerNoAndBrandIdFromId(document);
                     service.setMarketingEmail(document, take + "test@test.com");
                     service.removeConsolidationsArray(document);
 

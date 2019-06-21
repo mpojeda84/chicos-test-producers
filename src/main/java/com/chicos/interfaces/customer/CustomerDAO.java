@@ -13,11 +13,15 @@ public class CustomerDAO {
 
     private Connection connection = DriverManager.getConnection("ojai:mapr:");
     private VBStore store;
-//  private DocumentStore store;
 
-    public CustomerDAO(String tabelPath) {
+    public void setPrint(boolean print) {
+        if(store != null)
+            store.setPrint(print);
+    }
+
+    public CustomerDAO(String tabelPath, boolean print) {
         store = new VBStore (connection.getStore(tabelPath));
-//      store = connection.getStore(tabelPath);
+        store.setPrint(print);
     }
 
     public Iterator<Document> getIterator() {

@@ -26,6 +26,10 @@ public class VBStore
 		return _store;
 	}
 
+	public void setPrint(boolean print) {
+		this.print = print;
+	}
+
 	public VBStore(DocumentStore store) {
 		this._store = store;
 		print = true;

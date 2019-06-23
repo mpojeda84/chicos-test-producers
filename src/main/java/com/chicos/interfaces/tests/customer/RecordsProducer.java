@@ -15,6 +15,11 @@ import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -133,12 +138,16 @@ public class RecordsProducer {
 
 // ---------------------------------------------------------------------------------------
 
-  public static void main(String[] args) throws ExecutionException, InterruptedException {
+  public static void main(String[] args)
+      throws ExecutionException, InterruptedException, ParseException {
 
-    int total = 200;  // the number of elements to generate will grow from total to a max times of idsPerPartition * number-of-partitions in the stream
-    String tablePathToRead = "/chicos/tables/cu14-3-h100k.db";
-    String outputTopic = "/user/mapr/streams/chicos/customer-test:all-from8-2k-4partitions";
-    int idsPerPartition = 2;
+    CommandLineParser parser = new DefaultParser();
+    CommandLine commandLine = parser.parse( generateOptions(), args);
+
+    String tablePathToRead = commandLine.getOptionValue("s"); //"/chicos/tables/cu14-3-h100k.db";
+    String outputTopic = commandLine.getOptionValue("t");  //"/user/mapr/streams/chicos/customer-test:all-from8-2k-4partitions";
+    int idsPerPartition = Integer.parseInt(commandLine.getOptionValue("n")); // 2;
+    int total = Integer.parseInt(commandLine.getOptionValue("i")); // 200;  // the number of elements to generate will grow from total to a max times of idsPerPartition * number-of-partitions in the stream
 
     MurmurHashIdentifier murmurHashIdentifier = new MurmurHashIdentifier();
     RecordsProducer myProducerWrapper = new RecordsProducer(tablePathToRead, outputTopic);
@@ -155,5 +164,13 @@ public class RecordsProducer {
     myProducerWrapper.produce(ids, partitions,true);
   }
 
+  private static Options generateOptions() {
+    Options options = new Options();
+    options.addOption("s", true, "Source Table");
+    options.addOption("t", true, "Topic to output to");
+    options.addOption("n", true, "Number of unique elements to generate records from");
+    options.addOption("i", true, "iterations for each unique element");
+    return options;
+  }
 
 }

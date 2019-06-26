@@ -6,6 +6,7 @@ import com.chicos.interfaces.customer.CustomerService;
 import com.chicos.interfaces.customer.VBProducer;
 import com.chicos.interfaces.tests.customer.common.MurmurHashIdentifier;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -86,13 +87,24 @@ public class RecordsProducer {
    * @throws ExecutionException
    * @throws InterruptedException
    */
-  public void produce(Queue<Pair<Document,String>> ids, int numberOfPartitions,boolean toStream)
-      throws ExecutionException, InterruptedException {
+  public void produce(Queue<Pair<Document,String>> ids, int numberOfPartitions,boolean toStream) {
+
+    // for printing
+    Map<String, List<String>> toPrint = new HashMap<>();
+    ids.stream().map(x -> x.getFirst().getIdString()).distinct().forEach(x -> {
+      toPrint.put(x, new LinkedList<>());
+    });
+    // end for printing
 
     int recordCount = 0;
     while (!ids.isEmpty()) {
 
       Pair<Document, String> pair = ids.remove();
+
+      // for printing
+      toPrint.get(pair.getFirst().getIdString()).add(String.valueOf(recordCount));
+      // end for printing
+
       Document document = Json.newDocument(pair.getFirst());
       String originalId = document.getIdString();
 
@@ -119,6 +131,11 @@ public class RecordsProducer {
       System.out.println("Processed: " + recordCount++);
     }
     producer.close();
+
+    toPrint.keySet().forEach(x -> {
+      System.out.println("Printing email sequence for id: " + x);
+      toPrint.get(x).forEach(System.out::println);
+    });
   }
 
   private int hash(String id, int partitionsNumber) {
@@ -154,6 +171,14 @@ public class RecordsProducer {
     int partitions = myProducerWrapper.producer.partitionsFor(outputTopic).size();
 
     Map<Integer, List<String>> idsPerHash = murmurHashIdentifier.getIdsPerHash(partitions, idsPerPartition, myProducerWrapper.dao);
+
+    //printing:
+    idsPerHash.entrySet()
+        .stream()
+        .flatMap(x->x.getValue().stream())
+        .map(x-> "\"" + x + "\",")
+        .forEach(System.out::println);
+
 
     List<String> idArray = idsPerHash.entrySet()
         .stream()

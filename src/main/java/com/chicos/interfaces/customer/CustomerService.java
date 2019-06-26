@@ -43,6 +43,7 @@ public class CustomerService {
         document.set(path, value);
     }
 
+
     public void replaceCustomerNoAndBrandIdFromId(Document document) {
     	String id [] = document.getIdString().split("\\+");
     	document.set("brand_id", Long.parseLong(id[0]));

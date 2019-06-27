@@ -63,4 +63,8 @@ public class CustomerService {
         document.delete("consolidations");
     }
 
+    public void removeAlternateKeysArray(Document document) {
+    document.delete("alternate_keys");
+  }
+
 }

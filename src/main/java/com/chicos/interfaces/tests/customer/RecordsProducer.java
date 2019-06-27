@@ -111,6 +111,7 @@ public class RecordsProducer {
       service.replaceCustomerNoAndBrandIdFromId(document);
       service.setMarketingEmail(document, "test" + recordCount + "@test.com");
       service.removeConsolidationsArray(document);
+      service.removeAlternateKeysArray(document);
 
       int partition = hash(pair.getSecond(),
           numberOfPartitions); // hashing to the "wrong" partition, based in the "Wrong id"

@@ -54,7 +54,7 @@ public class CustomerService {
     public void setMarketingEmail(Document document, String email) {
 
         Map<String, Object> newEmail = new HashMap<String, Object>() 
-        {{ put("type", "Marketing"); put("email_address", email); }};
+        {{ put("type", "marketing"); put("email_address", email); }};
         
         document.set("emails", Collections.singletonList(newEmail));
     }

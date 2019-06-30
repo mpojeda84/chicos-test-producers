@@ -4,6 +4,7 @@ import com.chicos.interfaces.common.Pair;
 import com.chicos.interfaces.customer.CustomerDAO;
 import com.chicos.interfaces.customer.CustomerService;
 import com.chicos.interfaces.customer.VBProducer;
+import com.chicos.interfaces.customer.VBStore;
 import com.chicos.interfaces.tests.customer.common.MurmurHashIdentifier;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,10 +28,14 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.kafka.common.utils.Utils;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.ojai.Document;
 import org.ojai.json.Json;
 
 public class RecordsProducer {
+
+	private static final Logger log = LogManager.getLogger(RecordsProducer.class.getName());
 
   private String topic;
   private VBProducer<String, String> producer;
@@ -125,11 +130,10 @@ public class RecordsProducer {
         Future<RecordMetadata> result = producer.send(record);
         //responsePartition = result.get().partition();
       }
-      System.out.println(String.format(
-          "Producing record with real ID: %s , assigned partition is %d -- it will be found %s",
-          originalId, partition,
-          originalId.equals(pair.getSecond()) ? " by id." : "in the consolidation array"));
-      System.out.println("Processed: " + recordCount++);
+      log.info (String.format(
+              "#%d new record with real ID: %s, assigned partition %d - it'll be found %s",
+              recordCount++, originalId, partition,
+              originalId.equals(pair.getSecond()) ? " by id" : "in the consolidation array"));
     }
     producer.close();
 

@@ -59,6 +59,10 @@ public class CustomerService {
         document.set("emails", Collections.singletonList(newEmail));
     }
 
+    public void setVB(Document document, int vb) {
+    	document.set("vb", vb);
+    }
+
     public void removeConsolidationsArray(Document document) {
         document.delete("consolidations");
     }

@@ -16,10 +16,9 @@ import java.util.concurrent.Future;
 //=== Vadim Brodsky 2019-06-17 -2019-06-17 === 
 public class VBProducer <K,V>
 {
+	private static final Logger log = LogManager.getLogger(VBProducer.class.getName());
 	private KafkaProducer<K, V> producer;
 	private boolean print;
-
-	private static final Logger log = LogManager.getLogger(VBProducer.class.getName());
 
 	private static String millies (long n) 
 	{ return String.format("%,dms @", (System.nanoTime()-n)/1000); }
@@ -45,7 +44,7 @@ public class VBProducer <K,V>
 		List<PartitionInfo> r = null;
 		long n = System.nanoTime();
 		try { return r = producer.partitionsFor(topic);	}
-		finally { if(print) log.info(millies(n)+m +"("+topic+") => "+r); }
+		finally { if(print) log.info(millies(n)+m +"("+topic+") => "+r.size()+" <= "+r); }
 	}
 
 	public Future<RecordMetadata> send(ProducerRecord<K, V> record) {
@@ -53,7 +52,7 @@ public class VBProducer <K,V>
 		Future<RecordMetadata> r = null;
 		long n = System.nanoTime();
 		try { return r = producer.send(record);	}
-		finally { if(print) log.info(millies(n)+m +"("+record+") => "+r); }
+		finally { if(print) log.info(millies(n)+m +"("+record+") => "+r.isDone()+" <= "+r); }
 	}
 
 	public void flush() {

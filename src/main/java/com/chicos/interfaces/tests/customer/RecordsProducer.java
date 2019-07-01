@@ -114,7 +114,8 @@ public class RecordsProducer {
       String originalId = document.getIdString();
 
       service.replaceCustomerNoAndBrandIdFromId(document);
-      service.setMarketingEmail(document, "test" + recordCount + "@test.com");
+//      service.setMarketingEmail(document, "test" + recordCount + "@test.com");
+      service.setVB(document, recordCount);
       service.removeConsolidationsArray(document);
       service.removeAlternateKeysArray(document);
 
@@ -135,11 +136,13 @@ public class RecordsProducer {
               recordCount++, originalId, partition,
               originalId.equals(pair.getSecond()) ? " by id" : "in the consolidation array"));
     }
-    producer.close();
+    producer.close(); // VB ??
 
     toPrint.keySet().forEach(x -> {
       System.out.println("Printing email sequence for id: " + x);
-      toPrint.get(x).forEach(System.out::println);
+      toPrint.get(x).forEach(y -> System.out.print(", "+y));
+      System.out.println();
+//      toPrint.get(x).forEach(System.out::println);
     });
   }
 
@@ -151,8 +154,7 @@ public class RecordsProducer {
     final Properties producerProps = new Properties();
     producerProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
     producerProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-    producerProps
-        .put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+    producerProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
     producerProps.put(ProducerConfig.BATCH_SIZE_CONFIG, "16384");
 
     return new VBProducer<>(new KafkaProducer<>(producerProps));
@@ -178,15 +180,13 @@ public class RecordsProducer {
     Map<Integer, List<String>> idsPerHash = murmurHashIdentifier.getIdsPerHash(partitions, idsPerPartition, myProducerWrapper.dao);
 
     //printing:
-    idsPerHash.entrySet()
-        .stream()
+    idsPerHash.entrySet().stream()
         .flatMap(x->x.getValue().stream())
         .map(x-> "\"" + x + "\",")
         .forEach(System.out::println);
 
 
-    List<String> idArray = idsPerHash.entrySet()
-        .stream()
+    List<String> idArray = idsPerHash.entrySet().stream()
         .flatMap(x->x.getValue().stream())
         .collect(Collectors.toList());
 

@@ -108,6 +108,7 @@ public class RecordsProducer {
       Document document = Json.newDocument(pair.getFirst());
       String originalId = document.getIdString();
 
+      document.setId(pair.getSecond());
       service.replaceCustomerNoAndBrandIdFromId(document);
       service.setMarketingEmail(document, "test" + recordCount + "@test.com");
       service.removeConsolidationsArray(document);

@@ -25,4 +25,8 @@ public class Pair<T, V> {
   public void setSecond(V second) {
     this.second = second;
   }
+  
+  public String toString () { // VB: 2019-07-02
+	  return new StringBuilder().append("Pair(").append(first).append(",").append(second).append(")").toString();
+  }
 }

@@ -92,7 +92,7 @@ public class RecordsProducer {
    * @throws ExecutionException
    * @throws InterruptedException
    */
-  public void produce(Queue<Pair<Document,String>> ids, int numberOfPartitions,boolean toStream) {
+  public Map<String, List<String>> produce(Queue<Pair<Document,String>> ids, int numberOfPartitions,boolean toStream) {
 
     // for printing
     Map<String, List<String>> toPrint = new HashMap<>();
@@ -143,8 +143,9 @@ public class RecordsProducer {
       System.out.println("Printing email sequence for id: " + x);
       toPrint.get(x).forEach(y -> System.out.print(", "+y));
       System.out.println();
-//      toPrint.get(x).forEach(System.out::println);
     });
+
+    return toPrint;
   }
 
   private int hash(String id, int partitionsNumber) {
@@ -191,8 +192,13 @@ public class RecordsProducer {
         .flatMap(x->x.getValue().stream())
         .collect(Collectors.toList());
 
+    // reseting the sequence array of element with ID: "test-<real_id>", it will be used to check the processing after rebalance
+    myProducerWrapper.dao.resetSequences(idArray);
+
     Queue<Pair<Document,String>> ids = myProducerWrapper.prepareData(total, idArray);
-    myProducerWrapper.produce(ids, partitions,true);
+    Map<String, List<String>> toLog = myProducerWrapper.produce(ids, partitions,true);
+    Document document = Json.newDocument(toLog).setId("last-generated");
+    myProducerWrapper.dao.getStore().insertOrReplace(document);
   }
 
   private static Options generateOptions() {

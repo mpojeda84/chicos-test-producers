@@ -51,13 +51,19 @@ public class CheckIntegrity {
     expected.remove("_id");
 
     boolean okay = expected.keySet().stream().map(x-> {
-      List<String> elements = (List<String>) expected.get(x);
+      List<String> expectation = (List<String>) expected.get(x);
       Document found = store.findById("test-" + x);
-      List<Object> list = found.getList("sequence");
+      List<Object> reality = found.getList("sequence");
 
-      for (int i = 0; i < elements.size(); i++) {
-        String exp = elements.get(i);
-        String real = String.valueOf(list.get(i));
+      log.info("Size of Expectation: " + expectation.size() + " and Size of Real: " + reality.size());
+
+      List<String> realityClean = reality.stream().map(String::valueOf).distinct().collect(
+          Collectors.toList());
+
+      for (int i = 0; i < expectation.size(); i++) {
+        String exp = expectation.get(i);
+        String real = realityClean.get(i);
+
         if(!exp.equalsIgnoreCase(real))
           return false;
       }

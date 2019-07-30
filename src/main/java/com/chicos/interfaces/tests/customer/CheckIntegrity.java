@@ -60,6 +60,9 @@ public class CheckIntegrity {
       List<String> realityClean = reality.stream().map(String::valueOf).distinct().collect(
           Collectors.toList());
 
+      if(reality.size() != realityClean.size())
+        log.info("Elements could have been processed more than once for: " + x);
+
       for (int i = 0; i < expectation.size(); i++) {
         String exp = expectation.get(i);
         String real = realityClean.get(i);

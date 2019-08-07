@@ -55,13 +55,26 @@ public class CheckIntegrity {
       Document found = store.findById("test-" + x);
       List<Object> reality = found.getList("sequence");
 
-      log.info("Size of Expectation: " + expectation.size() + " and Size of Real: " + reality.size());
+      log.info(x +  " -- Size of Expectation: " + expectation.size() + " and Size of Real: " + reality.size());
 
       List<String> realityClean = reality.stream().map(String::valueOf).distinct().collect(
           Collectors.toList());
 
       if(reality.size() != realityClean.size())
         log.info("Elements could have been processed more than once for: " + x);
+
+
+      StringBuffer line = new StringBuffer("Expectation: ");
+      for (int i = 0; i < expectation.size(); i++) {
+        line.append(expectation.get(i));
+        line.append(", ");
+      }
+      line.append(" -- Reality: ");
+      for (int i = 0; i < reality.size(); i++) {
+        line.append(reality.get(i));
+        line.append(", ");
+      }
+      log.info(line.toString());
 
       for (int i = 0; i < expectation.size(); i++) {
         String exp = expectation.get(i);

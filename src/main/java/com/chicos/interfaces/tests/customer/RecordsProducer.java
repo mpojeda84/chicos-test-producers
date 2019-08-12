@@ -181,6 +181,8 @@ public class RecordsProducer {
 
     Map<Integer, List<String>> idsPerHash = murmurHashIdentifier.getIdsPerHash(partitions, idsPerPartition, myProducerWrapper.dao);
 
+    myProducerWrapper.dao.addToQuarantine(idsPerHash);
+
     //printing:
     idsPerHash.entrySet().stream()
         .flatMap(x->x.getValue().stream())

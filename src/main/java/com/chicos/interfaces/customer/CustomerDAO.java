@@ -1,6 +1,13 @@
 package com.chicos.interfaces.customer;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.ojai.Document;
 import org.ojai.DocumentStream;
 import org.ojai.json.Json;
@@ -45,4 +52,57 @@ public class CustomerDAO {
             store.insert(Json.newDocument().setId("test-" + s).set("sequence", Collections.emptyList()));
         }
     }
+
+    public void addToQuarantine(Map<Integer, List<String>> idsPerHash) {
+
+        //1. find or create ids list
+        Document quarantine = store.findById("quarantine");
+        if(quarantine == null)
+            store.insert(Json.newDocument().setId("quarantine").set("ids", Collections.emptyList()));
+        quarantine = store.findById("quarantine");
+
+        //2. create set to avoid duplicates
+        List<String> ids = quarantine.getList("ids")
+            .stream()
+            .map(x -> (String)x)
+            .collect(Collectors.toList());
+        Set<String> existing = new HashSet<>(ids);
+
+        //3.  add records with format quarantine-<id> as ID to the store
+        //3.1 add ids to "existing" set, to use later
+        idsPerHash.values()
+            .stream()
+            .flatMap(Collection::stream)
+            .peek(existing::add)
+            .map(x -> store.findById(x))
+            .map(x -> x.setId("quarantine-" + x.getIdString()))
+            .forEach(x -> {
+                if(store.findById("quarantine-" + x.getIdString()) == null)
+                    store.insertOrReplace(x);
+            });
+
+        // update the ids list with new "existing" set
+        quarantine.set("ids", new ArrayList<>(existing));
+        store.insertOrReplace(quarantine);
+
+    }
+
+    public void restoreFromQuarantine(){
+
+        Document quarantine = store.findById("quarantine");
+        if(quarantine == null)
+            return;
+
+        List<String> ids = quarantine.getList("ids").stream().map(x -> (String)x).collect(Collectors.toList());
+        ids.stream()
+            .map(x -> store.findById("quarantine-" + x).setId(x))
+            .forEach(x -> {
+                store.insertOrReplace(x);
+                store.delete("quarantine-" + x.getIdString());
+            });
+
+        quarantine.set("ids", Collections.emptyList());
+        store.insertOrReplace(quarantine);
+    }
+
 }

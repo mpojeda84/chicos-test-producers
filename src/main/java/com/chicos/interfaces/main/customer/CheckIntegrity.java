@@ -1,37 +1,18 @@
-package com.chicos.interfaces.tests.customer;
+package com.chicos.interfaces.main.customer;
 
-import com.chicos.interfaces.common.Pair;
 import com.chicos.interfaces.customer.CustomerDAO;
-import com.chicos.interfaces.customer.CustomerService;
-import com.chicos.interfaces.customer.VBProducer;
-import com.chicos.interfaces.customer.VBStore;
-import com.chicos.interfaces.tests.customer.common.MurmurHashIdentifier;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
+import com.chicos.interfaces.common.VBStore;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-import java.util.Queue;
-import java.util.Random;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.clients.producer.RecordMetadata;
-import org.apache.kafka.common.serialization.StringSerializer;
-import org.apache.kafka.common.utils.Utils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.ojai.Document;
-import org.ojai.json.Json;
 
 public class CheckIntegrity {
 

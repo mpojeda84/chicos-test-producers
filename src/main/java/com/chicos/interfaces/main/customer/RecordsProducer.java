@@ -1,11 +1,10 @@
-package com.chicos.interfaces.tests.customer;
+package com.chicos.interfaces.main.customer;
 
 import com.chicos.interfaces.common.Pair;
 import com.chicos.interfaces.customer.CustomerDAO;
 import com.chicos.interfaces.customer.CustomerService;
-import com.chicos.interfaces.customer.VBProducer;
-import com.chicos.interfaces.customer.VBStore;
-import com.chicos.interfaces.tests.customer.common.MurmurHashIdentifier;
+import com.chicos.interfaces.common.VBProducer;
+import com.chicos.interfaces.common.MurmurHashIdentifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;

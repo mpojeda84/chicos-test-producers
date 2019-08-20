@@ -1,4 +1,4 @@
-package com.chicos.interfaces.tests.customer.common;
+package com.chicos.interfaces.common;
 
 import com.chicos.interfaces.customer.CustomerDAO;
 import java.util.ArrayList;

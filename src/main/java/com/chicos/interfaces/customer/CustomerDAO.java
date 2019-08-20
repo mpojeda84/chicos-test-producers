@@ -1,7 +1,8 @@
 package com.chicos.interfaces.customer;
 
+import com.chicos.interfaces.NonUniqueResult;
+import com.chicos.interfaces.common.VBStore;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -9,20 +10,23 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.ojai.Document;
-import org.ojai.DocumentStream;
 import org.ojai.json.Json;
 import org.ojai.store.Connection;
-import org.ojai.store.DocumentMutation;
-import org.ojai.store.DocumentStore;
 import org.ojai.store.DriverManager;
 
 import java.util.Iterator;
 import java.util.List;
+import org.ojai.store.Query;
+import org.ojai.store.QueryResult;
 
 public class CustomerDAO {
 
     private Connection connection = DriverManager.getConnection("ojai:mapr:");
     private VBStore store;
+
+    public Connection getConnection() {
+        return connection;
+    }
 
     public VBStore getStore() {
         return store;
@@ -103,6 +107,22 @@ public class CustomerDAO {
 
         quarantine.set("ids", Collections.emptyList());
         store.insertOrReplace(quarantine);
+    }
+
+    public Document findByAssociateKeys(String keys) throws NonUniqueResult{
+        Query query = connection.newQuery().where(connection.newCondition().equals("associate_match_key", Collections.singletonList(keys)));
+        QueryResult queryResult = store.find(query);
+        List<Document> result = new ArrayList<>();
+        if(queryResult != null)
+            queryResult.forEach(x -> {
+                result.add(x);
+            });
+        if(result.size() > 1)
+            throw new NonUniqueResult();
+        if(!result.isEmpty())
+            return result.get(0);
+
+        return null;
     }
 
 }

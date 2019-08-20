@@ -1,6 +1,5 @@
-package com.chicos.interfaces.customer;
+package com.chicos.interfaces.common;
 
-import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.PartitionInfo;
@@ -9,7 +8,6 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Future;
 
 

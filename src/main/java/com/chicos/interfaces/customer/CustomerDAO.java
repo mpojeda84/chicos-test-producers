@@ -75,7 +75,7 @@ public class CustomerDAO {
             .flatMap(Collection::stream)
             .peek(existing::add)
             .map(x -> store.findById(x))
-            .map(x -> x.setId("quarantine-" + x.getIdString()))
+            .map(x ->  Json.newDocument().set("val", x.asJsonString()).setId("quarantine-" + x.getIdString()))
             .forEach(x -> {
                 if(store.findById("quarantine-" + x.getIdString()) == null)
                     store.insertOrReplace(x);
@@ -97,7 +97,7 @@ public class CustomerDAO {
         ids.stream()
             .map(x -> store.findById("quarantine-" + x).setId(x))
             .forEach(x -> {
-                store.insertOrReplace(x);
+                store.insertOrReplace( Json.newDocument(x.getString("val")));
                 store.delete("quarantine-" + x.getIdString());
             });
 

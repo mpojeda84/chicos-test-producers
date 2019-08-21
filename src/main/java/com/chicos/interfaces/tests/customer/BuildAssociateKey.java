@@ -29,7 +29,7 @@ public class BuildAssociateKey {
   private CustomerService customerService;
 
   public BuildAssociateKey(String customerTable) {
-    this.customerDao = new CustomerDAO(customerTable, false);
+    this.customerDao = new CustomerDAO(customerTable, true);
     this.customerService = new CustomerService();
   }
 

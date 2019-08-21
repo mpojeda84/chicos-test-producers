@@ -25,8 +25,8 @@ public class MatchAssociate {
   private AssociateService associateService;
 
   public MatchAssociate(String associateTable, String customerTable) {
-    this.associateDAO = new AssociateDAO(associateTable, false);
-    this.customerDAO = new CustomerDAO(customerTable, false);
+    this.associateDAO = new AssociateDAO(associateTable, true);
+    this.customerDAO = new CustomerDAO(customerTable, true);
     this.associateService = new AssociateService();
   }
 

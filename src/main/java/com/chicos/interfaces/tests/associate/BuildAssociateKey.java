@@ -32,7 +32,7 @@ public class BuildAssociateKey {
   private AssociateService associateService;
 
   public BuildAssociateKey(String associateTable) {
-    this.associateDAO = new AssociateDAO(associateTable, false);
+    this.associateDAO = new AssociateDAO(associateTable, true);
     this.associateService = new AssociateService();
   }
 

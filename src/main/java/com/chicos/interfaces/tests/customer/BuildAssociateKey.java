@@ -1,6 +1,5 @@
-package com.chicos.interfaces.main.customer;
+package com.chicos.interfaces.tests.customer;
 
-import com.chicos.interfaces.associate.AssociateDAO;
 import com.chicos.interfaces.customer.CustomerDAO;
 import com.chicos.interfaces.customer.CustomerService;
 import java.util.Iterator;
@@ -12,7 +11,6 @@ import org.apache.commons.cli.ParseException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.ojai.Document;
-import org.ojai.store.Connection;
 import org.ojai.store.DocumentMutation;
 
 public class BuildAssociateKey {

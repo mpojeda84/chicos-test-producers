@@ -1,4 +1,4 @@
-package com.chicos.interfaces.main.customer;
+package com.chicos.interfaces.tests.customer;
 
 import com.chicos.interfaces.common.Pair;
 import com.chicos.interfaces.customer.CustomerDAO;

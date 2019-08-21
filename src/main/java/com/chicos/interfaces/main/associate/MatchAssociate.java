@@ -1,6 +1,6 @@
 package com.chicos.interfaces.main.associate;
 
-import com.chicos.interfaces.NonUniqueResult;
+import com.chicos.interfaces.common.NonUniqueResultException;
 import com.chicos.interfaces.associate.AssociateDAO;
 import com.chicos.interfaces.associate.AssociateService;
 import com.chicos.interfaces.customer.CustomerDAO;
@@ -42,7 +42,7 @@ public class MatchAssociate {
         Document customer = null;
         try {
           customer = customerDAO.findByAssociateKeys(matchKey);
-        } catch (NonUniqueResult nonUniqueResult) {
+        } catch (NonUniqueResultException nonUniqueResultException) {
           log.error("More than one Customer has the same key: " + matchKey);
         }
         if(customer == null)

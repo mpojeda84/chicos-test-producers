@@ -1,4 +1,4 @@
-package com.chicos.interfaces.common;
+package com.chicos.interfaces.util;
 
 import static java.lang.Integer.min;
 

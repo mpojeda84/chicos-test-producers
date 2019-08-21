@@ -4,7 +4,7 @@ import com.chicos.interfaces.common.Pair;
 import com.chicos.interfaces.customer.CustomerDAO;
 import com.chicos.interfaces.customer.CustomerService;
 import com.chicos.interfaces.common.VBProducer;
-import com.chicos.interfaces.common.MurmurHashIdentifier;
+import com.chicos.interfaces.util.MurmurHashIdentifierUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -174,11 +174,12 @@ public class RecordsProducer {
     int idsPerPartition = Integer.parseInt(commandLine.getOptionValue("n")); // 2;
     int total = Integer.parseInt(commandLine.getOptionValue("i")); // 200;  // the number of elements to generate will grow from total to a max times of idsPerPartition * number-of-partitions in the stream
 
-    MurmurHashIdentifier murmurHashIdentifier = new MurmurHashIdentifier();
+    MurmurHashIdentifierUtil murmurHashIdentifierUtil = new MurmurHashIdentifierUtil();
     RecordsProducer myProducerWrapper = new RecordsProducer(tablePathToRead, outputTopic);
     int partitions = myProducerWrapper.producer.partitionsFor(outputTopic).size();
 
-    Map<Integer, List<String>> idsPerHash = murmurHashIdentifier.getIdsPerHash(partitions, idsPerPartition, myProducerWrapper.dao);
+    Map<Integer, List<String>> idsPerHash = murmurHashIdentifierUtil
+        .getIdsPerHash(partitions, idsPerPartition, myProducerWrapper.dao);
 
     myProducerWrapper.dao.addToQuarantine(idsPerHash);
 

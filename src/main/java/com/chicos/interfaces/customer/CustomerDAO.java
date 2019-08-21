@@ -1,6 +1,6 @@
 package com.chicos.interfaces.customer;
 
-import com.chicos.interfaces.NonUniqueResult;
+import com.chicos.interfaces.common.NonUniqueResultException;
 import com.chicos.interfaces.common.VBStore;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -109,7 +109,7 @@ public class CustomerDAO {
         store.insertOrReplace(quarantine);
     }
 
-    public Document findByAssociateKeys(String keys) throws NonUniqueResult{
+    public Document findByAssociateKeys(String keys) throws NonUniqueResultException {
         Query query = connection.newQuery().where(connection.newCondition().equals("associate_match_key", Collections.singletonList(keys)));
         QueryResult queryResult = store.find(query);
         List<Document> result = new ArrayList<>();
@@ -118,7 +118,7 @@ public class CustomerDAO {
                 result.add(x);
             });
         if(result.size() > 1)
-            throw new NonUniqueResult();
+            throw new NonUniqueResultException();
         if(!result.isEmpty())
             return result.get(0);
 

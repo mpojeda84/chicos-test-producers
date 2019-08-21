@@ -1,4 +1,4 @@
-package com.chicos.interfaces.common;
+package com.chicos.interfaces.util;
 
 import com.chicos.interfaces.customer.CustomerDAO;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.Map;
 import org.apache.kafka.common.utils.Utils;
 import org.ojai.Document;
 
-public class MurmurHashIdentifier {
+public class MurmurHashIdentifierUtil {
 
   /**
    * Returns a map of generated Hash -> List[Id] that meet the conditions not to be excluded
@@ -74,9 +74,10 @@ public class MurmurHashIdentifier {
     int idsPerPartition = 2;
     CustomerDAO dao = new CustomerDAO("/chicos/tables/cu14-3-h100k.db", false);
 
-    MurmurHashIdentifier murmurHashIdentifier = new MurmurHashIdentifier();
+    MurmurHashIdentifierUtil murmurHashIdentifierUtil = new MurmurHashIdentifierUtil();
 
-    Map<Integer, List<String>> ids = murmurHashIdentifier.getIdsPerHash(partitionsNumber, idsPerPartition, dao);
+    Map<Integer, List<String>> ids = murmurHashIdentifierUtil
+        .getIdsPerHash(partitionsNumber, idsPerPartition, dao);
 
     ids.entrySet()
         .stream()

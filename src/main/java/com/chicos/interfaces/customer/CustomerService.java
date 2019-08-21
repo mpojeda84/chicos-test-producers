@@ -1,10 +1,8 @@
 package com.chicos.interfaces.customer;
 
-import static java.lang.Integer.min;
-
-import com.chicos.interfaces.common.NameKeyUtil;
+import com.chicos.interfaces.util.NameKeyUtil;
 import com.chicos.interfaces.common.Pair;
-import com.chicos.interfaces.common.ZipAddressUtil;
+import com.chicos.interfaces.util.ZipAddressUtil;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;

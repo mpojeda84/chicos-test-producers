@@ -1,16 +1,8 @@
 package com.chicos.interfaces.associate;
 
-import static java.lang.Integer.min;
-
-import com.chicos.interfaces.common.NameKeyUtil;
+import com.chicos.interfaces.util.NameKeyUtil;
 import com.chicos.interfaces.common.Pair;
-import com.chicos.interfaces.common.ZipAddressUtil;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import com.chicos.interfaces.util.ZipAddressUtil;
 import org.ojai.Document;
 
 public class AssociateService {

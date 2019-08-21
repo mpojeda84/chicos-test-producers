@@ -13,6 +13,14 @@ import org.apache.log4j.Logger;
 import org.ojai.Document;
 import org.ojai.store.DocumentMutation;
 
+/***
+ * USAGE:
+ * java -cp chicos-test-producers-1.0-SNAPSHOT-jar-with-dependencies.jar  \
+ * com.chicos.interfaces.tests.customer.BuildAssociateKey \
+ * -c /user/mapr/tables/chicos/customer.db \
+ * 2>&1 | tee log/associate-key-customer-table$(date +%Y%m%d_%H%M%S).log
+ */
+
 public class BuildAssociateKey {
 
 	private static final Logger log = LogManager.getLogger(BuildAssociateKey.class.getName());

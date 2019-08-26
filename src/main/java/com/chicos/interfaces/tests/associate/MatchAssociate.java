@@ -32,28 +32,28 @@ public class MatchAssociate {
 
   private void run(){
 
-    String fieldname_associate_match_key = "associate_match_key";
-    Iterator<Document> iterator = associateDAO.getIterator();
-
-    while(iterator.hasNext()) {
-      Document current = iterator.next();
-      String matchKey = current.getString(fieldname_associate_match_key);
-      if(matchKey != null && !matchKey.isEmpty()) {
-        Document customer = null;
-        try {
-          customer = customerDAO.findByAssociateKeys(matchKey);
-        } catch (NonUniqueResultException nonUniqueResultException) {
-          log.error("More than one Customer has the same key: " + matchKey);
-        }
-        if(customer == null)
-          continue;
-
-        DocumentMutation mutation = customerDAO.getConnection().newMutation();
-        mutation.set("associate_id", customer);
-        customerDAO.getStore().update(current.getIdString(), mutation);
-
-      }
-    }
+//    String fieldname_associate_match_key = "associate_match_key";
+//    Iterator<Document> iterator = associateDAO.getIterator();
+//
+//    while(iterator.hasNext()) {
+//      Document current = iterator.next();
+//      String matchKey = current.getString(fieldname_associate_match_key);
+//      if(matchKey != null && !matchKey.isEmpty()) {
+//        Document customer = null;
+//        try {
+//          //customer = customerDAO.findByAssociateKeys(fieldname_associate_match_key, matchKey);
+//        } catch (NonUniqueResultException nonUniqueResultException) {
+//          log.error("More than one Customer has the same key: " + matchKey);
+//        }
+//        if(customer == null)
+//          continue;
+//
+//        DocumentMutation mutation = customerDAO.getConnection().newMutation();
+//        mutation.set("associate_id", customer);
+//        customerDAO.getStore().update(current.getIdString(), mutation);
+//
+//      }
+//    }
   }
 
 

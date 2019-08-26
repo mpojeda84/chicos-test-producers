@@ -109,8 +109,12 @@ public class CustomerDAO {
         store.insertOrReplace(quarantine);
     }
 
-    public Document findByAssociateKeys(String keys) throws NonUniqueResultException {
-        Query query = connection.newQuery().where(connection.newCondition().equals("associate_match_key", Collections.singletonList(keys)));
+    public Document findByCustomerByAssociateKeys(String fieldName, String value) throws NonUniqueResultException {
+
+        final Query query = connection.newQuery()
+            .where("{\"$eq\": {\""+fieldName+"\": \""+value+"\"}}")
+            .build();
+
         QueryResult queryResult = store.find(query);
         List<Document> result = new ArrayList<>();
         if(queryResult != null)

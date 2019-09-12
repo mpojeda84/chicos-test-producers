@@ -1,5 +1,6 @@
 package com.chicos.interfaces.util;
 
+import com.chicos.interfaces.common.VBStore;
 import com.chicos.interfaces.customer.CustomerDAO;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +21,12 @@ public class MurmurHashIdentifierUtil {
    */
   public Map<Integer, List<String>> getIdsPerHash(int partitionsNumber, int idsPerPartition,
       CustomerDAO dao) {
+
+    VBStore store = dao.getStore();
+    Document lastGeneratedDocument = store.findById("last-generated");
+    Map<String, Object> lastGenerated = lastGeneratedDocument == null ? new HashMap<>() : lastGeneratedDocument.asMap();
+
+
     Map<Integer, List<String>> ids = new HashMap<>(partitionsNumber);
     for (int i = 0; i < partitionsNumber; i++) {
       ids.put(i, new ArrayList<>());
@@ -27,10 +34,16 @@ public class MurmurHashIdentifierUtil {
 
     int count = 0;
     Iterator<Document> it = dao.getIterator();
+
+    System.out.println("iterator created");
+
     while (it.hasNext()){
       Document document = it.next();
-      if(exclude(document))
+      if(exclude(document, lastGenerated)) {
+        System.out.println("excluded " + document.getIdString());
         continue;
+      }
+
 
       int hash = hash(document.getIdString(), partitionsNumber);
       if (ids.get(hash).size() < idsPerPartition) {
@@ -44,21 +57,34 @@ public class MurmurHashIdentifierUtil {
     return ids;
   }
 
-  private boolean exclude (Document document) {
+  private boolean exclude (Document document, Map<String, Object> lastGenerated) {
+
+    if(document.getValue("vb") != null)
+      return true;
+    System.out.println("1");
     if(document.getIdString().contains("stream"))
       return true;
 
+    System.out.println("2");
     if(document.getList("consolidations") == null || document.getList("consolidations").isEmpty())
       return true;
 
+    System.out.println("3");
     try{
       document.getLong("consolidations[0].old_brand_id");
       document.getLong("consolidations[0].old_customer_no");
     } catch (Exception e)
     {
+      System.out.println("Exception on document.getLong(\"consolidations[0].old_brand_id\");");
+      System.out.println("Exception on document.getLong(\"consolidations[0].old_customer_no\");");
       return true;
     }
+    System.out.println("4");
 
+    if(lastGenerated != null && lastGenerated.containsKey(document.getIdString()))
+      return true;
+
+    System.out.println("5");
     return false;
   }
 
